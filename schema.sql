@@ -8,33 +8,42 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Table: jurnal
-CREATE TABLE IF NOT EXISTS `jurnal` (
+-- Table: journal_entries
+CREATE TABLE IF NOT EXISTS `journal_entries` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `user_id` INT NOT NULL,
-  `beban_pikiran_opt_1` TEXT,
-  `beban_pikiran_opt_2` TEXT,
-  `hambatan_utama` JSON, -- Store selections for Semester 1-7, PKL, Skripsi
-  `hambatan_personal` TEXT,
-  `self_reflection` TEXT,
-  `reaksi_fisik` TEXT,
-  `reaksi_sosial` TEXT,
-  `kebutuhan_bantuan` TEXT,
-  `ews_status` ENUM('Normal', 'Pendampingan Akademik', 'Intervensi Konseling') DEFAULT 'Normal',
+  `student_nim` VARCHAR(20) NOT NULL,
+  `student_name` VARCHAR(100) NOT NULL,
+  `profile_type` ENUM('awal', 'akhir') NOT NULL,
+  `semester` INT DEFAULT NULL,
+  `thesis_stage` VARCHAR(100) DEFAULT NULL,
+  `moods` JSON,
+  `enthusiasm` INT NOT NULL,
+  `burden` TEXT,
+  `dosen` VARCHAR(100),
+  `hambatan` JSON,
+  `hambatan_personal` JSON,
+  `self_reflection` JSON,
+  `body_reactions` JSON,
+  `social_reactions` JSON,
+  `help_needs` JSON,
+  `contact` VARCHAR(50),
+  `ews_result` VARCHAR(50),
+  `referral_status` VARCHAR(20) DEFAULT 'belum', -- 'belum', 'dirujuk', 'selesai'
+  `referral_target` VARCHAR(20) DEFAULT NULL, -- 'pembimbing', 'konselor'
+  `referral_date` DATE DEFAULT NULL,
+  `referral_done` BOOLEAN DEFAULT FALSE,
+  `referred_at` DATETIME DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Table: review
-CREATE TABLE IF NOT EXISTS `review` (
+-- Table: journal_reviews
+CREATE TABLE IF NOT EXISTS `journal_reviews` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `jurnal_id` INT NOT NULL,
-  `reviewer_id` INT,
-  `status` VARCHAR(255) NOT NULL DEFAULT 'Belum ditinjau', -- Handles 'Belum ditinjau', 'OK', 'Konseling Pembimbing + [Date] + [Status]', 'Konseling Konselor + [Date] + [Status]'
-  `notes` TEXT,
+  `journal_id` INT NOT NULL,
+  `reviewer_name` VARCHAR(120) NOT NULL DEFAULT 'Reviewer',
+  `reviewer_role` VARCHAR(40) NOT NULL DEFAULT 'dosen',
+  `note` TEXT,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (`jurnal_id`) REFERENCES `jurnal`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`reviewer_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
+  FOREIGN KEY (`journal_id`) REFERENCES `journal_entries`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

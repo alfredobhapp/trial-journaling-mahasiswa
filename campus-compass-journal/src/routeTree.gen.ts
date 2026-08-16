@@ -9,29 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ReviewerRouteImport } from './routes/reviewer'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as JournalNewRouteImport } from './routes/journal.new'
+import { Route as ReviewerRouteImport } from './routes/reviewer'
 import { Route as JournalHistoryRouteImport } from './routes/journal.history'
+import { Route as JournalNewRouteImport } from './routes/journal.new'
 
-const ReviewerRoute = ReviewerRouteImport.update({
-  id: '/reviewer',
-  path: '/reviewer',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JournalNewRoute = JournalNewRouteImport.update({
-  id: '/journal/new',
-  path: '/journal/new',
+const ReviewerRoute = ReviewerRouteImport.update({
+  id: '/reviewer',
+  path: '/reviewer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JournalHistoryRoute = JournalHistoryRouteImport.update({
   id: '/journal/history',
   path: '/journal/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalNewRoute = JournalNewRouteImport.update({
+  id: '/journal/new',
+  path: '/journal/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -71,13 +71,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/reviewer': {
-      id: '/reviewer'
-      path: '/reviewer'
-      fullPath: '/reviewer'
-      preLoaderRoute: typeof ReviewerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -85,11 +78,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/journal/new': {
-      id: '/journal/new'
-      path: '/journal/new'
-      fullPath: '/journal/new'
-      preLoaderRoute: typeof JournalNewRouteImport
+    '/reviewer': {
+      id: '/reviewer'
+      path: '/reviewer'
+      fullPath: '/reviewer'
+      preLoaderRoute: typeof ReviewerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/journal/history': {
@@ -97,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: '/journal/history'
       fullPath: '/journal/history'
       preLoaderRoute: typeof JournalHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/new': {
+      id: '/journal/new'
+      path: '/journal/new'
+      fullPath: '/journal/new'
+      preLoaderRoute: typeof JournalNewRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -111,13 +111,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

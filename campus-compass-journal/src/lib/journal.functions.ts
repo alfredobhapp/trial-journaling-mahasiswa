@@ -1,6 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { createServerSupabase } from "./supabase-public.server-utils";
 import { computeEws, type EwsResult } from "./ews";
 
 const submissionSchema = z.object({
@@ -25,43 +23,32 @@ const submissionSchema = z.object({
 export type { EwsResult };
 export type JournalSubmission = z.infer<typeof submissionSchema>;
 
-export const submitJournalEntry = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => submissionSchema.parse(data))
-  .handler(async ({ data }) => {
-    const ews = computeEws(data);
-    const supabase = createServerSupabase();
+export const submitJournalEntry = async ({ data }: { data: JournalSubmission }) => {
+  // Validate data
+  const parsedData = submissionSchema.parse(data);
+  const ews = computeEws(parsedData);
 
-    const { data: row, error } = await supabase
-      .from("journal_entries")
-      .insert({
-        student_nim: data.studentNim,
-        student_name: data.studentName,
-        profile_type: data.segment,
-        semester: data.segment === "awal" ? (data.semester ?? null) : null,
-        thesis_stage: data.segment === "akhir" ? (data.thesisStage ?? null) : null,
-        moods: data.moods,
-        enthusiasm: data.enthusiasm,
-        burden: data.burden,
-        dosen: data.dosen,
-        hambatan: data.hambatan,
-        hambatan_personal: data.hambatanPersonal,
-        self_reflection: data.selfReflection,
-        body_reactions: data.bodyReactions,
-        social_reactions: data.socialReactions,
-        help_needs: data.helpNeeds,
-        physical: [],
-        sleep: null,
-        help_need: data.helpNeeds[0] ?? null,
-        contact: data.contact,
-        ews_result: ews,
-      })
-      .select("id, created_at")
-      .single();
+  const payload = {
+    ...parsedData,
+    ews_result: ews,
+  };
 
-    if (error) {
-      console.error("[submitJournalEntry]", error);
-      throw new Error("Gagal menyimpan check-in. Coba lagi.");
-    }
-
-    return { id: row.id, createdAt: row.created_at, ews };
+  const response = await fetch('/journal/api/submit_journal.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   });
+
+  if (!response.ok) {
+    console.error("[submitJournalEntry] HTTP error", response.status);
+    throw new Error("Gagal menyimpan check-in. Coba lagi.");
+  }
+
+  const result = await response.json();
+  if (result.error) {
+    console.error("[submitJournalEntry] API error", result.error);
+    throw new Error("Gagal menyimpan check-in: " + result.error);
+  }
+
+  return { id: result.data?.jurnal_id ?? Date.now(), createdAt: new Date().toISOString(), ews };
+};

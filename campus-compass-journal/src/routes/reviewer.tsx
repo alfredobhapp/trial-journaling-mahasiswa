@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRole } from "@/lib/role-context";
@@ -129,9 +129,9 @@ type PickerMode = { target: "pembimbing" | "konselor"; keepDone: boolean } | nul
 function ReviewerPage() {
   const { role } = useRole();
   const queryClient = useQueryClient();
-  const fetchEntries = useServerFn(listJournalEntries);
-  const addReview = useServerFn(addJournalReview);
-  const updateReferral = useServerFn(setReferral);
+  const fetchEntries = listJournalEntries;
+  const addReview = addJournalReview;
+  const updateReferral = setReferral;
 
   const [filter, setFilter] = useState<EwsStatus | "all">("all");
   const [statusFilter, setStatusFilter] = useState<StatusKind | "all">("all");

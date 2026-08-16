@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import {
   CURRENT_STUDENT,
   EWS_META,
@@ -116,7 +115,7 @@ function FillJournalPage() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<EwsStatus | null>(null);
-  const submit = useServerFn(submitJournalEntry);
+  const submit = submitJournalEntry;
 
   const [form, setForm] = useState<FormState>({
     segment: s.profileType,
