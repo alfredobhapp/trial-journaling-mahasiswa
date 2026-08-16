@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Sesuaikan dengan path folder di cPanel (misal public_html/journal)
+    RewriteBase /journal/
+
+    # 1. Izinkan akses langsung ke folder /api/ (untuk backend PHP)
+    RewriteCond %{REQUEST_URI} ^/journal/api/ [NC]
+    RewriteRule ^ - [L]
+
+    # 2. Izinkan akses ke aset statis hasil build frontend
+    RewriteCond %{REQUEST_URI} ^/journal/campus-compass-journal/dist/ [NC]
+    RewriteRule ^ - [L]
+    
+    # 3. Jika ada request ke file aset yang tidak menyertakan path dist, arahkan ke folder dist
+    # Ini berguna jika frontend me-request /assets/main.js
+    RewriteCond %{DOCUMENT_ROOT}/journal/campus-compass-journal/dist/$1 -f
+    RewriteRule ^(assets/.*|.*\.(js|css|png|jpg|jpeg|gif|svg|ico|json))$ campus-compass-journal/dist/$1 [L]
+
+    # 4. Arahkan semua request lainnya ke index.php (untuk di-handle oleh React Router / Frontend)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
