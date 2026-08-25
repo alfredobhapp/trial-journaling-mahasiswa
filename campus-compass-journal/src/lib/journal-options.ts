@@ -62,8 +62,9 @@ export const HAMBATAN_SKRIPSI_GROUPS: { title: string; options: Opt[] }[] = [
     title: "Hambatan Ujian & Tekanan Kelulusan",
     options: [
       { value: "ujian_cemas", label: "Kecemasan berlebih (gugup, takut blank) membayangkan ujian sidang komprehensif atau pendadaran." },
-      { value: "ujian_kompetensi", label: "Stres dan tekanan mental akibat harus menyeimbangkan revisi skripsi dengan persiapan belajar untuk ujian kompetensi profesi/sertifikasi kelulusan." },
+      { value: "ujian_kompetensi", label: "Stres dan tekanan mental akibat harus menyeimbangkan revisi skripsi dengan persiapan belajar." },
       { value: "ujian_fomo", label: "Merasa tertinggal (FOMO) dan rendah diri ketika melihat teman-teman seangkatan sudah sidang, lulus, atau pamer foto kelulusan lebih dulu." },
+      { value: "tidak_ada_ujian", label: "Tidak ada" },
     ],
   },
   {
@@ -141,6 +142,7 @@ export const CONTACT_OPTIONS: Opt[] = [
 export const NONE_VALUES = new Set([
   "tidak_ada_akademik",
   "tidak_ada_skripsi",
+  "tidak_ada_ujian",
   "tidak_ada_personal",
   "tidak_ada_refleksi",
   "tidak_ada_tubuh",
