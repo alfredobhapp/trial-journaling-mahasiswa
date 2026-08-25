@@ -615,8 +615,6 @@ function Step4({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
       <div className="space-y-2">
         <Label>1. Reaksi pada Tubuh</Label>
         <p className="text-xs text-muted-foreground">
-          Saat beban pikiran itu menumpuk, &quot;sampah fisik&quot; atau keluhan pada tubuh seperti
-          apa yang paling sering kamu rasakan beberapa hari terakhir?
         </p>
         <CheckList
           prefix="bod"
@@ -629,8 +627,6 @@ function Step4({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
       <div className="space-y-2">
         <Label>2. Reaksi pada Interaksi Lingkungan</Label>
         <p className="text-xs text-muted-foreground">
-          Saat beban pikiran tersebut datang, bagaimana &quot;sampah sosial&quot; atau dampaknya
-          terhadap caramu berinteraksi dengan orang lain?
         </p>
         <CheckList
           prefix="soc"

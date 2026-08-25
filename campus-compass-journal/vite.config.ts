@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: "/journal/campus-compass-journal/dist/",
+  base: "/journal/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
