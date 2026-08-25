@@ -47,3 +47,18 @@ CREATE TABLE IF NOT EXISTS `journal_reviews` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`journal_id`) REFERENCES `journal_entries`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Table: mahasiswa_dosen
+CREATE TABLE IF NOT EXISTS `mahasiswa_dosen` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `mahasiswa_id` INT NOT NULL,
+  `dosen_id` INT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY `unique_student_lecturer` (`mahasiswa_id`, `dosen_id`),
+  CONSTRAINT `fk_map_mahasiswa` FOREIGN KEY (`mahasiswa_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_map_dosen` FOREIGN KEY (`dosen_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Default Admin User (Password: admin123)
+INSERT IGNORE INTO `users` (`username`, `password`, `role`) VALUES 
+('admin', '$2y$10$gXqK87f0bJ/8rJgCj/c.o.5vQyV9QkS4Owhh3kYlWw5p2HjUqXyca', 'admin');
