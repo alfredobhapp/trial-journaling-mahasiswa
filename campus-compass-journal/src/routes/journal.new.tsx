@@ -581,7 +581,7 @@ function Step3({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
       </div>
 
       <div className="space-y-3">
-        <Label>2. Hambatan Personal</Label>
+        <Label>Hambatan Personal</Label>
         <CheckList
           prefix="per"
           options={HAMBATAN_PERSONAL}
