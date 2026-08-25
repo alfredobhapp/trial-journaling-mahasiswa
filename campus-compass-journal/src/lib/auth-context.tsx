@@ -41,7 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem('user');
     // Also notify backend to destroy session
-    fetch('/api/logout.php').catch(console.error);
+    const url = `${import.meta.env.BASE_URL}api/logout.php`.replace(/\/+/g, '/');
+    fetch(url).catch(console.error);
   };
 
   return (

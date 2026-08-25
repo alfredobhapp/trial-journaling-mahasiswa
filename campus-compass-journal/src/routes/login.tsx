@@ -29,14 +29,20 @@ function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Typically you would fetch from your PHP backend like this:
-      const res = await fetch("/api/login.php", {
+      const url = `${import.meta.env.BASE_URL}api/login.php`.replace(/\/+/g, '/');
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
       
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `Server error (${res.status})`);
+      }
       
       if (res.ok && data.success) {
         login(data.user);
@@ -44,9 +50,8 @@ function LoginPage() {
       } else {
         setError(data.error || "Login gagal. Periksa username dan password Anda.");
       }
-    } catch (err) {
-      // Network error or other exception
-      setError("Terjadi kesalahan jaringan. Coba lagi.");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan jaringan. Coba lagi.");
     } finally {
       setIsLoading(false);
     }

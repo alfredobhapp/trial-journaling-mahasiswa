@@ -44,12 +44,13 @@ function MappingPage() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("/api/mapping.php");
+      const url = `${import.meta.env.BASE_URL}api/mapping.php`.replace(/\/+/g, '/');
+      const res = await fetch(url);
       const data = await res.json();
       if (res.ok) {
-        setDosens(data.dosens);
-        setMahasiswas(data.mahasiswas);
-        setMappings(data.mappings);
+        setDosens(data.dosens || []);
+        setMahasiswas(data.mahasiswas || []);
+        setMappings(data.mappings || []);
       }
     } catch (err) {
       console.error(err);
@@ -85,7 +86,8 @@ function MappingPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/mapping.php", {
+      const url = `${import.meta.env.BASE_URL}api/mapping.php`.replace(/\/+/g, '/');
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -94,7 +96,13 @@ function MappingPage() {
         }),
       });
       
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `Server error (${res.status})`);
+      }
       
       if (res.ok && data.success) {
         setMessage("Mapping berhasil disimpan.");
@@ -104,8 +112,8 @@ function MappingPage() {
       } else {
         setError(data.error || "Gagal menyimpan mapping.");
       }
-    } catch (err) {
-      setError("Terjadi kesalahan jaringan.");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan jaringan.");
     } finally {
       setIsLoading(false);
     }

@@ -44,13 +44,20 @@ function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/register.php", {
+      const url = `${import.meta.env.BASE_URL}api/register.php`.replace(/\/+/g, '/');
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, role }),
       });
       
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `Server error (${res.status})`);
+      }
       
       if (res.ok && data.success) {
         setMessage("Pengguna berhasil didaftarkan.");
@@ -60,8 +67,8 @@ function RegisterPage() {
       } else {
         setError(data.error || "Gagal mendaftarkan pengguna.");
       }
-    } catch (err) {
-      setError("Terjadi kesalahan jaringan.");
+    } catch (err: any) {
+      setError(err?.message || "Terjadi kesalahan jaringan.");
     } finally {
       setIsLoading(false);
     }
