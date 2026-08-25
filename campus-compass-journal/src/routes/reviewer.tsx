@@ -262,7 +262,7 @@ function ReviewerPage() {
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {isAdmin
-            ? "Akses hanya-baca. Admin tidak dapat meninjau atau mengubah status rujukan."
+            ? "Akses hanya melihat. Admin tidak dapat meninjau atau mengubah status rujukan."
             : "Seluruh check-in mahasiswa beserta status Early Warning System dan rujukan konseling."}
         </p>
       </div>
@@ -447,7 +447,7 @@ function ReviewerPage() {
 
                 {isAdmin ? (
                   <div className="rounded-md border bg-muted/40 p-3 text-sm text-muted-foreground">
-                    Admin memiliki akses hanya-baca. Tidak bisa tinjau atau mengubah status rujukan.
+                    Admin memiliki akses hanya meliha. Tidak bisa tinjau atau mengubah status rujukan.
                   </div>
                 ) : (
                   <div className="space-y-3 rounded-lg border p-3">

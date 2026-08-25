@@ -524,11 +524,8 @@ function Step3({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
 
       <div className="space-y-3">
         <div>
-          <Label>1. Hambatan Akademik & Adaptasi</Label>
+          <Label>Hambatan Akademik & Adaptasi</Label>
           <p className="text-xs text-muted-foreground">
-            {isAkhir
-              ? "Ditampilkan sesuai fase Mahasiswa Akhir / Skripsi."
-              : `Ditampilkan sesuai fase Semester ${form.semester}.`}
           </p>
         </div>
 
@@ -613,9 +610,10 @@ function Step4({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
       </div>
 
       <div className="space-y-2">
-        <Label>1. Reaksi pada Tubuh</Label>
+        <Label>Reaksi pada Tubuh</Label>
         <p className="text-xs text-muted-foreground">
-          Saat beban pikiran itu menumpuk, keluhan pada tubuh seperti apa yang paling sering kamu rasakan beberapa hari terakhir?
+          Saat beban pikiran itu menumpuk, keluhan pada tubuh seperti
+          apa yang paling sering kamu rasakan beberapa hari terakhir?
         </p>
         <CheckList
           prefix="bod"
@@ -626,9 +624,10 @@ function Step4({ form, patch }: { form: FormState; patch: (p: Partial<FormState>
       </div>
 
       <div className="space-y-2">
-        <Label>2. Reaksi pada Interaksi Lingkungan</Label>
+        <Label>Reaksi pada Interaksi Lingkungan</Label>
         <p className="text-xs text-muted-foreground">
-          Saat beban pikiran tersebut datang, bagaimana dampaknya terhadap caramu berinteraksi dengan orang lain?
+          Saat beban pikiran tersebut datang, bagaimana dampaknya
+          terhadap caramu berinteraksi dengan orang lain?
         </p>
         <CheckList
           prefix="soc"
