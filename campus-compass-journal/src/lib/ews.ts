@@ -49,7 +49,7 @@ export function computeEws(f: EwsInput): EwsResult {
   if (negReflection >= 3) risk += 2;
   else if (negReflection >= 1) risk += 1;
 
-  const body = f.bodyReactions.length;
+  const body = real(f.bodyReactions).length;
   if (body >= 3) risk += 2;
   else if (body >= 1) risk += 1;
 

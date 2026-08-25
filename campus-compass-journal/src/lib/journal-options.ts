@@ -55,6 +55,7 @@ export const HAMBATAN_SKRIPSI_GROUPS: { title: string; options: Opt[] }[] = [
       { value: "skripsi_dosbing", label: "Kendala komunikasi dengan Dosen Pembimbing (sulit mendapat jadwal, revisi yang terus berubah, atau ekspektasi yang tidak sejalan)." },
       { value: "skripsi_burnout", label: "Kehilangan motivasi secara drastis (burnout tingkat akhir) dan merasa sangat lelah untuk melanjutkan sisa bab skripsi." },
       { value: "skripsi_perfeksionis", label: "Terlalu perfeksionis (takut salah) hingga akhirnya terus menunda-nunda menulis atau takut menyerahkan draf ke dosen." },
+      { value: "tidak_ada_skripsi", label: "Tidak ada" },
     ],
   },
   {
@@ -108,6 +109,7 @@ export const BODY_REACTIONS: Opt[] = [
   { value: "jantung_napas", label: "Reaksi Jantung & Pernapasan: Perasaan cemas yang diikuti gejala fisik seperti dada berdebar-debar, atau napas terasa sesak/pendek." },
   { value: "otot_saraf", label: "Ketegangan Saraf & Otot: Kepala terasa pusing/berat karena terus-menerus overthinking, leher/pundak kaku, atau rahang menegang." },
   { value: "pencernaan", label: "Gangguan Pencernaan & Pola Makan: Asam lambung naik (maag), mual saat stres, makan terlalu banyak (emotional eating), atau kehilangan nafsu makan sama sekali." },
+  { value: "tidak_ada_tubuh", label: "Tidak ada keluhan, sehat" },
 ];
 
 export const SOCIAL_REACTIONS: Opt[] = [
@@ -138,8 +140,10 @@ export const CONTACT_OPTIONS: Opt[] = [
 /** Values that represent an explicit "Tidak ada" answer. */
 export const NONE_VALUES = new Set([
   "tidak_ada_akademik",
+  "tidak_ada_skripsi",
   "tidak_ada_personal",
   "tidak_ada_refleksi",
+  "tidak_ada_tubuh",
   "tidak_ada_sosial",
   "tidak_ada_bantuan",
 ]);

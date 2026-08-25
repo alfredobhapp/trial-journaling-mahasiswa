@@ -147,7 +147,11 @@ function FillJournalPage() {
       case 2:
         return !!form.dosen && form.hambatan.length > 0 && form.hambatanPersonal.length > 0;
       case 3:
-        return form.selfReflection.length > 0 && form.socialReactions.length > 0;
+        return (
+          form.selfReflection.length > 0 &&
+          form.bodyReactions.length > 0 &&
+          form.socialReactions.length > 0
+        );
       case 4:
         return form.helpNeeds.length > 0 && !!form.contact;
       default:
