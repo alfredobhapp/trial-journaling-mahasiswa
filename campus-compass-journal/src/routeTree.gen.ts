@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MappingRouteImport } from './routes/mapping'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ReviewerRouteImport } from './routes/reviewer'
 import { Route as JournalHistoryRouteImport } from './routes/journal.history'
 import { Route as JournalNewRouteImport } from './routes/journal.new'
@@ -17,6 +21,26 @@ import { Route as JournalNewRouteImport } from './routes/journal.new'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MappingRoute = MappingRouteImport.update({
+  id: '/mapping',
+  path: '/mapping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewerRoute = ReviewerRouteImport.update({
@@ -37,12 +61,20 @@ const JournalNewRoute = JournalNewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/mapping': typeof MappingRoute
+  '/register': typeof RegisterRoute
   '/reviewer': typeof ReviewerRoute
   '/journal/history': typeof JournalHistoryRoute
   '/journal/new': typeof JournalNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/mapping': typeof MappingRoute
+  '/register': typeof RegisterRoute
   '/reviewer': typeof ReviewerRoute
   '/journal/history': typeof JournalHistoryRoute
   '/journal/new': typeof JournalNewRoute
@@ -50,20 +82,53 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/mapping': typeof MappingRoute
+  '/register': typeof RegisterRoute
   '/reviewer': typeof ReviewerRoute
   '/journal/history': typeof JournalHistoryRoute
   '/journal/new': typeof JournalNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/reviewer' | '/journal/history' | '/journal/new'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/mapping'
+    | '/register'
+    | '/reviewer'
+    | '/journal/history'
+    | '/journal/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/reviewer' | '/journal/history' | '/journal/new'
-  id: '__root__' | '/' | '/reviewer' | '/journal/history' | '/journal/new'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/mapping'
+    | '/register'
+    | '/reviewer'
+    | '/journal/history'
+    | '/journal/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/mapping'
+    | '/register'
+    | '/reviewer'
+    | '/journal/history'
+    | '/journal/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  LoginRoute: typeof LoginRoute
+  MappingRoute: typeof MappingRoute
+  RegisterRoute: typeof RegisterRoute
   ReviewerRoute: typeof ReviewerRoute
   JournalHistoryRoute: typeof JournalHistoryRoute
   JournalNewRoute: typeof JournalNewRoute
@@ -76,6 +141,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mapping': {
+      id: '/mapping'
+      path: '/mapping'
+      fullPath: '/mapping'
+      preLoaderRoute: typeof MappingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reviewer': {
@@ -104,6 +197,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
+  LoginRoute: LoginRoute,
+  MappingRoute: MappingRoute,
+  RegisterRoute: RegisterRoute,
   ReviewerRoute: ReviewerRoute,
   JournalHistoryRoute: JournalHistoryRoute,
   JournalNewRoute: JournalNewRoute,

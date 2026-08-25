@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpenCheck, ClipboardList, History, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { BookOpenCheck, ClipboardList, History, LayoutDashboard, ShieldCheck, UserPlus, Link as LinkIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,27 +12,40 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useRole } from "@/lib/role-context";
+import { useAuth } from "@/lib/auth-context";
 
 const studentItems = [
-  { title: "Home / Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Fill Journal", url: "/journal/new", icon: ClipboardList },
   { title: "Journal History", url: "/journal/history", icon: History },
 ];
 
 const reviewerItems = [
-  { title: "Home / Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Reviewer Area", url: "/reviewer", icon: ShieldCheck },
+];
+
+const adminItems = [
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Registrasi Pengguna", url: "/register", icon: UserPlus },
+  { title: "Mapping Dosen-Mhs", url: "/mapping", icon: LinkIcon },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { role } = useRole();
+  const { user } = useAuth();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
-  const isActive = (p: string) => (p === "/" ? pathname === "/" : pathname.startsWith(p));
+  const isActive = (p: string) => (p === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(p));
 
-  const items = role === "mahasiswa" ? studentItems : reviewerItems;
+  const role = user?.role || "mahasiswa";
+  const items =
+    role === "admin"
+      ? adminItems
+      : role === "mahasiswa"
+        ? studentItems
+        : reviewerItems;
+
   const groupLabel =
     role === "mahasiswa"
       ? "Mahasiswa"

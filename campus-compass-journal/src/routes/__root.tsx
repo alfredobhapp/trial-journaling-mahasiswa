@@ -11,8 +11,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { RoleProvider } from "@/lib/role-context";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -81,33 +80,53 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+function MainLayout() {
+  const { user } = useAuth();
+  
+  // If no user, just render outlet without sidebar (e.g. for Login/Landing page)
+  if (!user) {
+    return (
+      <div className="min-h-screen w-full bg-background">
+        <Outlet />
+        <Toaster />
+      </div>
+    );
+  }
+
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-muted/30">
+        <AppSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
+            <SidebarTrigger />
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-sm font-semibold text-foreground">
+                Sistem Jurnal & Peringatan Dini
+              </h1>
+            </div>
+            <div className="text-sm font-medium pr-4">
+              {user.username} ({user.role})
+            </div>
+          </header>
+          <main className="min-w-0 flex-1">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+      <Toaster />
+    </SidebarProvider>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RoleProvider>
-        <SidebarProvider>
-          <div className="flex min-h-screen w-full bg-muted/30">
-            <AppSidebar />
-            <div className="flex min-w-0 flex-1 flex-col">
-              <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
-                <SidebarTrigger />
-                <div className="min-w-0 flex-1">
-                  <h1 className="truncate text-sm font-semibold text-foreground">
-                    Sistem Jurnal & Peringatan Dini
-                  </h1>
-                </div>
-                <RoleSwitcher />
-              </header>
-              <main className="min-w-0 flex-1">
-                <Outlet />
-              </main>
-            </div>
-          </div>
-          <Toaster />
-        </SidebarProvider>
-      </RoleProvider>
+      <AuthProvider>
+        <MainLayout />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
