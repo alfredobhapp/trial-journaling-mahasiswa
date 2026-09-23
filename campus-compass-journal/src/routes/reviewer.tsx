@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useRole } from "@/lib/role-context";
+import { useAuth } from "@/lib/auth-context";
 import { EWS_META, type EwsStatus } from "@/lib/mock-data";
 import { labelsOf, labelOf } from "@/lib/journal-options";
 import {
@@ -127,7 +127,8 @@ function SummaryCard({
 type PickerMode = { target: "pembimbing" | "konselor"; keepDone: boolean } | null;
 
 function ReviewerPage() {
-  const { role } = useRole();
+  const { user } = useAuth();
+  const role = user?.role ?? "dosen";
   const queryClient = useQueryClient();
   const fetchEntries = listJournalEntries;
   const addReview = addJournalReview;

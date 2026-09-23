@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Table: journal_entries
 CREATE TABLE IF NOT EXISTS `journal_entries` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT NULL DEFAULT NULL COMMENT 'FK ke users.id untuk mahasiswa yang submit',
   `student_nim` VARCHAR(20) NOT NULL,
   `student_name` VARCHAR(100) NOT NULL,
   `profile_type` ENUM('awal', 'akhir') NOT NULL,
@@ -28,14 +29,21 @@ CREATE TABLE IF NOT EXISTS `journal_entries` (
   `help_needs` JSON,
   `contact` VARCHAR(50),
   `ews_result` VARCHAR(50),
-  `referral_status` VARCHAR(20) DEFAULT 'belum', -- 'belum', 'dirujuk', 'selesai'
-  `referral_target` VARCHAR(20) DEFAULT NULL, -- 'pembimbing', 'konselor'
+  `referral_status` VARCHAR(20) DEFAULT 'belum',
+  `referral_target` VARCHAR(20) DEFAULT NULL,
   `referral_date` DATE DEFAULT NULL,
   `referral_done` BOOLEAN DEFAULT FALSE,
   `referred_at` DATETIME DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY `idx_user_id` (`user_id`),
+  CONSTRAINT `fk_journal_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- If table already exists, add user_id column:
+-- ALTER TABLE `journal_entries` ADD COLUMN `user_id` INT NULL DEFAULT NULL AFTER `id`,
+--   ADD KEY `idx_user_id` (`user_id`),
+--   ADD CONSTRAINT `fk_journal_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL;
 
 -- Table: journal_reviews
 CREATE TABLE IF NOT EXISTS `journal_reviews` (

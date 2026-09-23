@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useAuth } from "@/lib/auth-context";
 import {
   CURRENT_STUDENT,
   EWS_META,
@@ -110,7 +111,8 @@ function toggleExclusive(list: string[], value: string): string[] {
 }
 
 function FillJournalPage() {
-  const s = CURRENT_STUDENT;
+  const { user } = useAuth();
+  const s = CURRENT_STUDENT; // kept for profile defaults (thesisStage etc)
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -164,8 +166,9 @@ function FillJournalPage() {
     try {
       const res = await submit({
         data: {
-          studentNim: s.nim,
-          studentName: s.name,
+          userId: user?.id,
+          studentNim: user?.username ?? s.nim,
+          studentName: user?.username ?? s.name,
           segment: form.segment,
           semester: form.segment === "awal" ? form.semester : undefined,
           thesisStage: form.segment === "akhir" ? form.thesisStage : undefined,

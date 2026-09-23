@@ -2,6 +2,7 @@ import { z } from "zod";
 import { computeEws, type EwsResult } from "./ews";
 
 const submissionSchema = z.object({
+  userId: z.number().int().positive().optional(),
   studentNim: z.string().min(1),
   studentName: z.string().min(1),
   segment: z.enum(["awal", "akhir"]),
@@ -33,14 +34,16 @@ export const submitJournalEntry = async ({ data }: { data: JournalSubmission }) 
     ews_result: ews,
   };
 
-  const response = await fetch('/journal/api/submit_journal.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const url = `${import.meta.env.BASE_URL}api/submit_journal.php`.replace(/\/+/g, "/");
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
-    console.error("[submitJournalEntry] HTTP error", response.status);
+    const text = await response.text().catch(() => "");
+    console.error("[submitJournalEntry] HTTP error", response.status, text);
     throw new Error("Gagal menyimpan check-in. Coba lagi.");
   }
 

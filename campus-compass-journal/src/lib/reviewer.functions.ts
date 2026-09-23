@@ -1,16 +1,18 @@
 import { z } from "zod";
 
+const apiBase = () =>
+  `${import.meta.env.BASE_URL}api`.replace(/\/+/g, "/");
+
 export const listJournalEntries = async () => {
-  const response = await fetch('/journal/api/list_journals.php', { method: 'GET' });
+  const response = await fetch(`${apiBase()}/list_journals.php`, { method: "GET" });
   if (!response.ok) {
-    console.error("[listJournalEntries] HTTP error", response.status);
+    const text = await response.text().catch(() => "");
+    console.error("[listJournalEntries] HTTP error", response.status, text);
     throw new Error("Gagal memuat data jurnal.");
   }
 
   const result = await response.json();
-  if (result.error) {
-    throw new Error(result.error);
-  }
+  if (result.error) throw new Error(result.error);
 
   return {
     entries: result.entries || [],
@@ -21,25 +23,23 @@ export const listJournalEntries = async () => {
 export const addJournalReview = async ({ data }: { data: any }) => {
   const parsedData = z
     .object({
-      journalId: z.string(), // Allowing any string instead of uuid since MySQL ID might be int
+      journalId: z.string(),
       note: z.string().trim().min(1).max(2000),
       reviewerName: z.string().trim().min(1).max(120).default("Reviewer"),
       reviewerRole: z.string().trim().min(1).max(40).default("dosen"),
     })
     .parse(data);
 
-  const response = await fetch('/journal/api/add_review.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch(`${apiBase()}/add_review.php`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(parsedData),
   });
 
-  if (!response.ok) {
-    throw new Error("Gagal menyimpan catatan feedback.");
-  }
+  if (!response.ok) throw new Error("Gagal menyimpan catatan feedback.");
   const result = await response.json();
   if (result.error) throw new Error(result.error);
-  
+
   return result.data;
 };
 
@@ -48,22 +48,24 @@ export const setReferral = async ({ data }: { data: any }) => {
     .object({
       journalId: z.string(),
       target: z.enum(["pembimbing", "konselor"]).nullable(),
-      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+      date: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .nullable()
+        .optional(),
       done: z.boolean().default(false),
     })
     .parse(data);
 
-  const response = await fetch('/journal/api/set_referral.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch(`${apiBase()}/set_referral.php`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(parsedData),
   });
 
-  if (!response.ok) {
-    throw new Error("Gagal memperbarui status rujukan.");
-  }
+  if (!response.ok) throw new Error("Gagal memperbarui status rujukan.");
   const result = await response.json();
   if (result.error) throw new Error(result.error);
-  
+
   return result.data;
 };
