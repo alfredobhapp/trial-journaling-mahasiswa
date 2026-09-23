@@ -36,15 +36,15 @@ if ($userId) {
     $userRow = $checkStmt->fetch();
     
     if (!$userRow) {
-        // user_id dikirim tapi bukan mahasiswa — tolak
-        http_response_code(403);
-        echo json_encode(['error' => 'Akses ditolak. Hanya mahasiswa yang bisa submit jurnal.']);
-        exit;
+        // user_id dikirim tapi tidak ditemukan/bukan mahasiswa — fallback ke guest/anonymous
+        $userId = null;
+        $studentNim  = $input['studentNim']  ?? 'unknown';
+        $studentName = $input['studentName'] ?? 'unknown';
+    } else {
+        // Gunakan username dari DB sebagai studentNim jika tidak disertakan
+        $studentNim  = $input['studentNim']  ?? $userRow['username'];
+        $studentName = $input['studentName'] ?? $userRow['username'];
     }
-    
-    // Gunakan username dari DB sebagai studentNim jika tidak disertakan
-    $studentNim  = $input['studentNim']  ?? $userRow['username'];
-    $studentName = $input['studentName'] ?? $userRow['username'];
 } else {
     // Tidak ada session/userId — izinkan submit tanpa user_id (fallback)
     $studentNim  = $input['studentNim']  ?? 'unknown';
